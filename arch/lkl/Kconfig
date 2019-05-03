@@ -105,5 +105,14 @@ config THREAD_PTH
 	  because the fork syscall on Linux and many other kernels
 	  clones just the calling thread throwing away all others.
 
+config UNSAFE_FUZZING_OPTIONS
+    bool "Use fuzzer-friendly options (UNSAFE FOR PRODUCTION)"
+	default n
+    help
+	  This disables some guards against compiling criptography code
+	  with optimizations, etc.
+
+	  DO NOT USE UNLESS YOU WILL USE THE COMPILED CODE
+	  SOLELY FOR FUZZING.
 endmenu
 
