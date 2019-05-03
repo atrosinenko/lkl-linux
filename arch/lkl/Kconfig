@@ -93,4 +93,17 @@ config CONSOLE_LOGLEVEL_QUIET
 	  will be used as the loglevel. IOW passing "quiet" will be the
 	  equivalent of passing "loglevel=<CONSOLE_LOGLEVEL_QUIET>"
 
+menu "Fuzzing options"
+
+config THREAD_PTH
+    bool "Use GNU Pth instead of Pthreads for threading"
+	default n
+	help
+	  Execute all library threads inside a single host OS thread.
+
+	  This can be useful for fuzzing in AFL style with forkserver,
+	  because the fork syscall on Linux and many other kernels
+	  clones just the calling thread throwing away all others.
+
+endmenu
 

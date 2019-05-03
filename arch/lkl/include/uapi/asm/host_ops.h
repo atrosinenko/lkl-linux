@@ -5,7 +5,11 @@
 struct lkl_mutex;
 struct lkl_sem;
 struct lkl_tls_key;
+#ifdef CONFIG_THREAD_PTH
+typedef void * lkl_thread_t;
+#else
 typedef unsigned long lkl_thread_t;
+#endif
 struct lkl_jmp_buf {
 	unsigned long buf[128];
 };

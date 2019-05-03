@@ -17,6 +17,10 @@ define is_defined
 $(shell $(CC) -dM -E - </dev/null | grep $(1))
 endef
 
+define has_config
+$(shell grep "LKL_CONFIG_$(1)" $(OUTPUT)/include/lkl/autoconf.h)
+endef
+
 define android_host
   $(call set_autoconf_var,ANDROID,y)
 endef
@@ -56,9 +60,9 @@ define posix_host
   $(call set_autoconf_var,POSIX,y)
   $(call set_autoconf_var,VIRTIO_NET,y)
   LDFLAGS += -pie
-  CFLAGS += -fPIC -pthread
+  CFLAGS += -fPIC $(if $(call has_config THREAD_PTH),,-pthread)
   SOSUF := .so
-  $(if $(call is_defined,__ANDROID__),$(call android_host),LDLIBS += -lrt -lpthread)
+  $(if $(call is_defined,__ANDROID__),$(call android_host),LDLIBS += -lrt $(if $(call has_config THREAD_PTH),-lpth,-pthread))
   $(if $(filter $(1),elf64-x86-64-freebsd),$(call bsd_host))
   $(if $(filter $(1),elf32-littlearm),$(call arm_host))
   $(if $(filter $(1),elf64-littleaarch64),$(call aarch64_host))
